@@ -75,30 +75,7 @@ static NTSTATUS CstReadFile(
     _Out_ PULONG FileSize
     )
 {
-    NTSTATUS status;
-    HANDLE fileHandle = INVALID_HANDLE_VALUE;
-    LARGE_INTEGER fileSize;
-    PVOID buffer;
-    IO_STATUS_BLOCK iosb;
-
-    if (!NT_SUCCESS(status = MyCreateFile(&fileHandle, FileName, FILE_GENERIC_READ, FILE_ATTRIBUTE_NORMAL, FILE_SHARE_READ, FILE_OPEN, FILE_SYNCHRONOUS_IO_NONALERT | FILE_NON_DIRECTORY_FILE)))
-        goto CleanupExit;
-
-    if (!GetFileSizeEx(fileHandle, &fileSize) || fileSize.QuadPart > FileSizeLimit)
-        goto CleanupExit;
-
-    buffer = malloc((ULONG)fileSize.QuadPart);
-    if (!NT_SUCCESS(status = NtReadFile(fileHandle, NULL, NULL, NULL, &iosb, buffer, (ULONG)fileSize.QuadPart, NULL, NULL)))
-        goto CleanupExit;
-
-    *Buffer = buffer;
-    *FileSize = (ULONG)fileSize.QuadPart;
-
-CleanupExit:
-    if(fileHandle != INVALID_HANDLE_VALUE)
-        NtClose(fileHandle);
-
-    return status;
+     return STATUS_SUCCESS;
 }
 
 typedef struct {
